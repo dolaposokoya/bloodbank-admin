@@ -1,13 +1,37 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+    --menu-background: rgba(165, 21, 21, 0.9);
+    --font: 'Roboto Mono', monospace;
+    --blood: #f50a0a;
+    --shadow: 10px 1px 3px -3px rgba(0, 0, 0, 0.1);
+    --search-shadow: 5px 5px 33px -3px rgba(0, 0, 0, 0.1);
+    --whiteButton: rgb(247, 240, 240);
+    --font: 'Roboto Mono', monospace;
+    --formColor: #b41717;
+    --btn-black: rgb(0, 0, 0);
+    --btn-background: #000000;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*{
+    font: var(--font);
+    font-family: var(--font);
+}
+
+body{
+    background-color: #dddddd;
+}
+.buttons {
+    border: 2px solid black;
+    background-color: white;
+    padding: 14px 28px;
+    color: var(--btn-black);
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+    margin-bottom: 40px;
+}
+
+.allButton {
+    border-color: var(--btn-black);
+    color: black;
 }

@@ -1,0 +1,67 @@
+.cardLayout {
+  position: relative;
+  height: 100px;
+  top: 50px;
+  right: -60px;
+  z-index: 99999999999;
+  box-shadow: 300px 300px #f8f8f8;
+  max-width: 170px;
+  float: right;
+  animation: popUp 2s alternate ease-in-out forwards;
+}
+
+.cardLayout::after {
+  position: absolute;
+  top: -5px;
+  right: 18%;
+  content: '';
+  padding: 10px;
+  transform: rotate(45deg);
+  margin-left: 10px;
+  margin-bottom: -200px;
+  background-color: var(--menu-background);
+}
+
+.flex{
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  padding-top: 6px;
+}
+
+
+.logOut {
+  padding: 3px;
+  font-weight: bold;
+  width: 100%;
+  color: black;
+  text-align: left;
+}
+
+.content {
+  text-align: 'left';
+  border-radius: 7px;
+  background-color: var(--menu-background);
+  font-weight: bold;
+  padding: 12px 27px;
+  color: black;
+  margin: 5px;
+  width: auto;
+  z-index: 100;
+}
+
+.icon {
+  color: red;
+}
+
+
+
+@keyframes popUp {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
