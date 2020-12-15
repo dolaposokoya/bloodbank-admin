@@ -12,6 +12,7 @@
 .pagination>li {
     margin-bottom: 18px;
 }
+
 .pagination>li>a {
     border: none;
     width: 100%;
@@ -33,10 +34,28 @@
 }
 
 /* Ends here */
+.fas {
+    border: none;
+}
 
 .fa-sort {
     cursor: pointer;
     margin: 0.4px;
+}
+
+.fa-toggle-off {
+    cursor: pointer;
+    color: rgb(255, 0, 0);
+}
+
+.fa-toggle-on {
+    cursor: pointer;
+    color: rgb(0, 133, 0);
+}
+
+.toggle {
+    cursor: pointer;
+    color: rgb(0, 133, 0);
 }
 
 .search-query {
@@ -160,6 +179,16 @@ table tr:hover {
         position: relative;
     }
 
+    .table td::after {
+        content: '\2191';
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 3px;
+        font-size: 12px;
+        text-align: left;
+    }
+
     .table td::before {
         content: attr(data-label);
         position: absolute;
@@ -172,7 +201,7 @@ table tr:hover {
     }
 }
 
-@media (max-width: 665px) {
+/* @media (max-width: 665px) {
     table {
         margin: 0;
         margin-top: 10px;
@@ -285,4 +314,4 @@ table tr:hover {
         font-weight: bold;
         text-align: left;
     }
-}
+} */

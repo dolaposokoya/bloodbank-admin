@@ -7,12 +7,11 @@ import axios from "axios";
 import { apiUrl } from '../../url/apiUrl';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import $ from 'jquery'
-import Logo from "./image.png";
 import './table.css'
 
 const token = localStorage.getItem('token')
 
-class BasicTable extends Component {
+class Table extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -115,15 +114,13 @@ class BasicTable extends Component {
     }
 
     getOneUser = async (id) => {
-        let status = $(`#${id}`).attr('status')
-        console.log('userId', status)
-        if (status === '1') {
-            $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
-            $(`#${id}`).attr('status', '0')
+        let userId = $(`#${id}`)
+        let toggle = $(`#${id}`).css('color');
+        if (toggle === 'rgb(255, 0, 0)') {
+            $(`#${id}`).css('color', 'rgb(0, 133,0)');
         }
         else {
-            $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
-            $(`#${id}`).attr('status', '1')
+            $(`#${id}`).css('color', 'rgb(255, 0, 0)');
         }
     }
 
@@ -133,12 +130,9 @@ class BasicTable extends Component {
             'Gender',
             'Blood Group',
             'City',
-            'Status',
-            'Avatar'
+            'Status'
         ]
         const { waiting, loading, users, pageCount } = this.state
-        const imageUrl = `${apiUrl.baseURL}images/`
-
         return (
             <div>
                 <div className="form-inline mt-5">
@@ -150,12 +144,10 @@ class BasicTable extends Component {
                             }} />
                     </div>
                 </div>
-                {/* \src\image\image.png */}
                 <div className="card mb-3">
                     <table className="table">
                         <thead>
                             <tr>
-                                <th scope="col">Avatar</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('first_name')}></i> Name</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('gender')}></i> Gender</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('blood_group')}></i> Blood Group</th>
@@ -167,12 +159,11 @@ class BasicTable extends Component {
                             {loading === false ? users.map((item, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td data-label={dataLabel[5]}>{item.profile_image ? <img src={`${imageUrl}${item.profile_image}`} style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="user" /> : <img src={Logo} style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="user" />}</td>
                                         <td data-label={dataLabel[0]}>{item.first_name}</td>
                                         <td data-label={dataLabel[1]}>{item.gender}</td>
                                         <td data-label={dataLabel[2]}>{item.blood_group}</td>
                                         <td data-label={dataLabel[3]}>{item.city}</td>
-                                        <td data-label={dataLabel[4]}>{item.approved ? <i className="fas fa-toggle-on" id={item._id} status="1" onClick={() => this.getOneUser(item._id)}></i> : <i className="fas fa-toggle-off" status="0" id={item._id} onClick={() => this.getOneUser(item._id)}></i>}</td>
+                                        <td data-label={dataLabel[4]}><ToggleOffIcon id={item._id} className="toggle" onClick={() => this.getOneUser(item._id)} /></td>
                                     </tr>
                                 )
                             }) : <tr className="text-center"><td className="text-center">{waiting}</td></tr>}
@@ -208,4 +199,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ usersAction }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(BasicTable)
+export default connect(mapStateToProps, mapDispatchToProps)(Table)
