@@ -6,7 +6,6 @@ import User from '../components/users/users'
 
 
 function App() {
-  // const history = useHistory();
   return (
     <>
       <Router history={history}>
