@@ -19,7 +19,6 @@ export const LoginAction = (loginData, callback) => {
             .then(response => response.json())
             .then(userData => {
                 if (userData) {
-                    console.log('userData', userData.data)
                     if (userData.success === false) {
                         dispatch({ type: LOGIN_SUCCESS, payload: userData.message });
                         callback({ error: true, message: userData.message })

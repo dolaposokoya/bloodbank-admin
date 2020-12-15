@@ -68,7 +68,7 @@ class BasicTable extends Component {
             }
         }
         catch (error) {
-            console.log('error', error.message)
+            alert(error.message)
         }
 
     }
@@ -113,7 +113,6 @@ class BasicTable extends Component {
     }
 
     getOneUser = async (id) => {
-        console.log('User id', id)
     }
 
     render() {
@@ -162,21 +161,21 @@ class BasicTable extends Component {
                         </tbody>
                     </table>
                 </div>
-            <div>
-            <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'break-me'}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePageClick}
-                    containerClassName={'pagination'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
+                <div>
+                    <ReactPaginate
+                        previousLabel={'previous'}
+                        nextLabel={'next'}
+                        breakLabel={'...'}
+                        breakClassName={'break-me'}
+                        pageCount={pageCount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={this.handlePageClick}
+                        containerClassName={'pagination'}
+                        subContainerClassName={'pages pagination'}
+                        activeClassName={'active'}
+                    />
+                </div>
             </div>
         )
     }

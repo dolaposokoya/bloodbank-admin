@@ -49,24 +49,18 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Login = (props) => {
-    console.log('props', props)
     // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState({})
     const [passwordError, setPasswordError] = useState({})
-    console.log('history', props)
-    
+
     const loginUser = async (event) => {
         event.preventDefault();
-        console.log("Login User")
         const isValid = await validateInput()
-        console.log('isValid', isValid)
         if (isValid === true) {
             let formData = { email: email, password: password }
-            console.log(`${JSON.stringify(formData)}`)
             props.LoginAction(formData, response => {
-                console.log('response', response)
                 if (response) {
                     if (response.error === false) {
                         window.location.assign('/Users')
@@ -81,7 +75,7 @@ const Login = (props) => {
             })
         }
         else {
-            console.log('Unable to validate user')
+            alert('Unable to validate user')
         }
     }
 

@@ -1,7 +1,7 @@
 const { REACT_APP_ENVIRONMENT, REACT_APP_AUTH } = process.env
 const apiEndpoint = REACT_APP_ENVIRONMENT === 'development' ? `http://localhost:5000/api/` : `https://api-bloodbank-v1.herokuapp.com/api/`
 const basicAuth = btoa(`${REACT_APP_AUTH}`)
-console.log('basicAuth', basicAuth)
+
 export const apiUrl = {
     basicAuth: basicAuth,
     loginUrl: apiEndpoint + "user/loginUser",
