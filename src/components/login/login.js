@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { useHistory } from 'react-router';
+import { useHistory, Redirect } from 'react-router';
 import '../../index.css'
 import {
     Avatar, Button,
@@ -65,7 +65,8 @@ const Login = (props) => {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        history.push("/users");
+                        return <Redirect to="/users"/>
+                        // history.push("/users");
                         // window.location.assign('/users')
                     }
                     else {
