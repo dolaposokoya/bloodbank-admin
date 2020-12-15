@@ -10,8 +10,12 @@ function App() {
     <>
       <Router history={history}>
         <Switch>
-          <Route path="/" exact component={Login} />
-          <Route path="/Users" component={User} />
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route path="/Users">
+            <User />
+          </Route>
         </Switch>
       </Router>
     </>

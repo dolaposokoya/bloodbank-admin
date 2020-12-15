@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import '../../index.css'
@@ -48,14 +48,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Login(props) {
-    console.log('props',props)
+const Login = (props) => {
+    console.log('props', props)
     // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState({})
     const [passwordError, setPasswordError] = useState({})
     console.log('history', props)
+    
     const loginUser = async (event) => {
         event.preventDefault();
         console.log("Login User")

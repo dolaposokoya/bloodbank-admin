@@ -7,7 +7,6 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    Grid,
     Typography
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
@@ -72,7 +71,9 @@ export default function Header() {
         bottom: false,
         right: false,
     });
-    const [name, setName] = useState('A')
+    const [name] = useState('A')
+    // const [name, setName] = useState('A')
+
     const [showModal, setShowModal] = useState(false)
 
     const toggleDrawer = (anchor, open) => (event) => {
