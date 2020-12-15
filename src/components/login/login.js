@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { useHistory, Redirect } from 'react-router';
+import { useHistory } from 'react-router';
 import '../../index.css'
 import {
     Avatar, Button,
