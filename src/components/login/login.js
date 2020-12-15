@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
+import { useHistory } from 'react-router';
 import '../../index.css'
 import {
     Avatar, Button,
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Login = (props) => {
+    const history = useHistory();
     // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -63,7 +65,8 @@ const Login = (props) => {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        window.location.assign('/users')
+                        history.push("/users");
+                        // window.location.assign('/users')
                     }
                     else {
                         alert(response.message)
