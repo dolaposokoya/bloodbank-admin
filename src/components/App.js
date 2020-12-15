@@ -13,9 +13,9 @@ function App() {
           <Route exact path="/">
             <Login />
           </Route>
-          <Route path="/Users">
-            <User />
-          </Route>
+          <Route path="/Users" component={User} />
+          {/* <User />
+          </Route> */}
         </Switch>
       </Router>
     </>
