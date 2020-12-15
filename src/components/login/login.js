@@ -63,7 +63,7 @@ const Login = (props) => {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        window.location.assign('/Users')
+                        window.location.assign('/users')
                     }
                     else {
                         alert(response.message)
