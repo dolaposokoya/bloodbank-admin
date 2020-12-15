@@ -1,12 +1,10 @@
 import loginReducer from './loginReducer';
-// import userReducer from './userDataReducer';
-// import metaDataReducer from './metaDataReducer';
+import usersReducer from './getAllUserReducer';
 import { combineReducers } from 'redux';
 
 const allReducers = combineReducers({
     loginReducer,
-    //   userReducer,
-    //   metaDataReducer,
+    usersReducer,
 });
 
 export default allReducers;

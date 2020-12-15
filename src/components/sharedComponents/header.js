@@ -30,19 +30,19 @@ const useStyles = makeStyles({
     list: {
         background: 'rgba(241, 184, 184,0.1)',
         height: '100%',
-        padding: '15px',
-        width: 200,
+        padding: '17px',
+        width: 250,
     },
     fullList: {
         width: 'auto',
     },
     navItem: {
-        padding: '20px',
+        padding: '15px',
         borderBottom: '2px solid black',
     },
     menuIcon: {
         cursor: 'pointer',
-        fontSize: '36px',
+        fontSize: '46px',
         margin: 'auto',
         paddingTop: '4px',
         paddingLeft: '20px'

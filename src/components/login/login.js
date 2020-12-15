@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login(props) {
+    console.log('props',props)
     // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -70,7 +71,7 @@ function Login(props) {
                         window.location.assign('/Users')
                     }
                     else {
-                        window.location.assign('/')
+                        alert(response.message)
                     }
                 }
                 else {

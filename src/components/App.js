@@ -2,7 +2,7 @@ import React from 'react'
 import { Router, Switch, Route } from "react-router-dom";
 import Login from "../components/login/login";
 import history from '../routes/history';
-import User from '../components/userTable/usertable'
+import User from '../components/users/users'
 
 
 function App() {

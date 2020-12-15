@@ -30,6 +30,9 @@ export const LoginAction = (loginData, callback) => {
                         callback({ error: false, message: userData.message })
                     }
                 }
+            }).catch(error => {
+                dispatch({ type: LOGIN_SUCCESS, payload: error.message });
+                callback({ error: true, message: error.message })
             })
     };
 };
