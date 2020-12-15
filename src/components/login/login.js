@@ -65,9 +65,8 @@ const Login = (props) => {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        return <Redirect to="/users"/>
-                        // history.push("/users");
-                        // window.location.assign('/users')
+                        // return <Redirect to="/users"/>
+                        history.push("/users");
                     }
                     else {
                         alert(response.message)
