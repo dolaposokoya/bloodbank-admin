@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import { apiUrl } from '../../url/apiUrl';
-import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import $ from 'jquery'
 import Logo from "./image.png";
 import './table.css'
