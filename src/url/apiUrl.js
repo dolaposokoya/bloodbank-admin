@@ -12,4 +12,6 @@ export const apiUrl = {
     getMetaData: apiEndpoint + "bloodgroup/bloodAllGroup",
     makeRequest: apiEndpoint + "request/createRequest",
     sortAllUsers: apiEndpoint + "user/sortAllUser",
+    updateStatus: apiEndpoint + "user/updateStatus",
+    validateToken: apiEndpoint + "token/validateToken",
 };

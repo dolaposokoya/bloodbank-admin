@@ -8,7 +8,9 @@
     list-style: none;
     outline: none;
 }
-
+.MuiAlert-standardSuccess{
+    background-color: rgb(0,133,0);
+}
 .pagination>li {
     margin-bottom: 18px;
 }
@@ -141,6 +143,7 @@ table tr.active-row {
 table tr:hover {
     border: 1px solid;
     padding: 10px;
+    /* box-shadow: 5px 5px 5px rgb(172, 71, 25); */
     box-shadow: 5px 5px 5px rgb(230, 225, 225);
     transform: scale(1.05);
 }
@@ -155,7 +158,7 @@ table tr:hover {
 
     table {
         margin: 0;
-        margin-top: 100px;
+        margin-top: 5px;
     }
 
     .table thead {
@@ -201,10 +204,10 @@ table tr:hover {
     }
 }
 
-/* @media (max-width: 665px) {
+@media (max-width: 665px) {
     table {
         margin: 0;
-        margin-top: 10px;
+        margin-top: 5px;
     }
 
     .table thead {
@@ -314,4 +317,4 @@ table tr:hover {
         font-weight: bold;
         text-align: left;
     }
-} */
+}

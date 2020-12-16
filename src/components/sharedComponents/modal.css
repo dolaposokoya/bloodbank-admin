@@ -1,3 +1,6 @@
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeInherit{
+  color: black;
+}
 .cardLayout {
   position: relative;
   height: 100px;

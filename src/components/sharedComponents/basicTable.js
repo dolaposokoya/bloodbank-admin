@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { usersAction } from '../../actions/allUsersAction'
+import { usersAction } from '../../actions/allUsersAction';
 import { bindActionCreators } from 'redux';
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import { apiUrl } from '../../url/apiUrl';
 import $ from 'jquery'
+import { Redirect } from "react-router";
+import AlertMessage from "./alert";
 import Logo from "./image.png";
 import './table.css'
 
 const token = localStorage.getItem('token')
-
 class BasicTable extends Component {
     constructor(props) {
         super(props)
@@ -22,7 +23,10 @@ class BasicTable extends Component {
             pageCount: 0,
             orgtableData: [],
             currentPage: 0,
-            waiting: 'Data loading.....'
+            errorMessage: '',
+            waiting: 'Data loading.....',
+            message: '',
+            severity: '',
         }
     }
 
@@ -69,7 +73,7 @@ class BasicTable extends Component {
             }
         }
         catch (error) {
-            alert(error.message)
+            this.setState({ message: error.message, severity: 'error' })
         }
 
     }
@@ -89,7 +93,9 @@ class BasicTable extends Component {
 
     getAllUsers = async () => {
         try {
+            // const history = useHistory()
             this.setState({ loading: true })
+            this.setState({ errorMessage: 'Data loading.....' })
             await this.props.usersAction(token, response => {
                 if (response) {
                     if (response.error === false) {
@@ -99,30 +105,80 @@ class BasicTable extends Component {
                             pageCount: Math.ceil(data.length / this.state.perPage),
                             orgtableData: data,
                             users: slice,
-                            loading: false
+                            loading: false,
+                            errorMessage: ''
                         })
                     }
-                    else if (response.error === true) {
-                        alert(response.message)
+                    else if (response.error === true && response.message === 'Unauthorized Access') {
+                        console.log('error', response.message)
+                        this.setState({ errorMessage: response.message })
+                        return <Redirect to="/" />
+                    }
+
+                    else {
+                        this.setState({ message: response.message, severity: 'error' })
                     }
                 }
             })
         }
         catch (error) {
-            alert(error.message)
+            this.setState({ message: error.message, severity: 'error' })
         }
     }
 
-    getOneUser = async (id) => {
-        let status = $(`#${id}`).attr('status')
-        console.log('userId', status)
-        if (status === '1') {
-            $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
-            $(`#${id}`).attr('status', '0')
+    sendRequest = async (id, status) => {
+        try {
+            const headers = {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                token: `Basic ${token}`
+            }
+            const response = await axios({
+                method: 'put',
+                headers,
+                url: `${apiUrl.updateStatus}?id=${id}`,
+                data: { status: status }
+            });
+            if (response && response.data.success === true) {
+                return response.data
+            }
+            else {
+                return response.data
+            }
         }
-        else {
-            $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
-            $(`#${id}`).attr('status', '1')
+        catch (error) {
+            this.setState({ message: error.message, severity: 'error' })
+        }
+    }
+
+    updateUserStatus = async (id) => {
+        try {
+            let status = parseInt($(`#${id}`).attr('status'))
+            if (status === 1) {
+                const data = await this.sendRequest(id, 0)
+                if (data.success === true) {
+                    $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
+                    $(`#${id}`).attr('status', `${data.data.status}`)
+                    this.setState({ message: data.message, severity: 'success' })
+                }
+                else {
+                    this.setState({ message: data.message, severity: 'error' })
+                }
+            }
+            else {
+                const data = await this.sendRequest(id, 1)
+                if (data.success === true) {
+                    $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
+                    $(`#${id}`).attr('status', `${data.data.status}`)
+                    this.setState({ message: data.message, severity: 'error' })
+                }
+                else {
+                    this.setState({ message: data.message, severity: 'error' })
+                }
+            }
+        }
+        catch (error) {
+            this.setState({ message: error.message, severity: 'error' })
         }
     }
 
@@ -135,11 +191,13 @@ class BasicTable extends Component {
             'Status',
             'Avatar'
         ]
-        const { waiting, loading, users, pageCount } = this.state
+        const { waiting, loading, users, pageCount, errorMessage, message, severity } = this.state
         const imageUrl = `${apiUrl.baseURL}images/`
-
         return (
             <div>
+                  <div className="mt-4 mb-4">
+                    <AlertMessage severity={severity} message={message} />
+                </div>
                 <div className="form-inline mt-5">
                     <div className="input-group input-group-md mb-3 search">
                         <input className="form-control mb-2" type="search" id="search-query" placeholder="Search"
@@ -149,7 +207,6 @@ class BasicTable extends Component {
                             }} />
                     </div>
                 </div>
-                {/* \src\image\image.png */}
                 <div className="card mb-3">
                     <table className="table">
                         <thead>
@@ -171,10 +228,10 @@ class BasicTable extends Component {
                                         <td data-label={dataLabel[1]}>{item.gender}</td>
                                         <td data-label={dataLabel[2]}>{item.blood_group}</td>
                                         <td data-label={dataLabel[3]}>{item.city}</td>
-                                        <td data-label={dataLabel[4]}>{item.approved ? <i className="fas fa-toggle-on" id={item._id} status="1" onClick={() => this.getOneUser(item._id)}></i> : <i className="fas fa-toggle-off" status="0" id={item._id} onClick={() => this.getOneUser(item._id)}></i>}</td>
+                                        <td data-label={dataLabel[4]}>{item.status === 1 ? <i className="fas fa-toggle-on" id={item._id} status={item.status} onClick={() => this.updateUserStatus(item._id)}></i> : <i className="fas fa-toggle-off" status={item.status} id={item._id} onClick={() => this.updateUserStatus(item._id)}></i>}</td>
                                     </tr>
                                 )
-                            }) : <tr className="text-center"><td className="text-center">{waiting}</td></tr>}
+                            }) : <tr className="text-center"><td className="text-center">{errorMessage}</td></tr>}
                         </tbody>
                     </table>
                 </div>
@@ -200,8 +257,10 @@ class BasicTable extends Component {
 
 const mapStateToProps = (state) => {
     const { users } = state.usersReducer
+    const { verified } = state.tokenReducer;
     return {
-        users
+        users,
+        verified
     }
 }
 

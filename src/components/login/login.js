@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import { useHistory } from "react-router";
@@ -17,8 +17,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../sharedComponents/copyright'
 import { LoginAction } from '../../actions/loginAction';
+import { verifyTokenAction } from '../../actions/verifyTokenAction';
 
 
+
+const token = localStorage.getItem('token')
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -50,8 +53,37 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Login = (props) => {
+
+    // useEffect(() => {
+    //     verifyToken()
+    //     return () => {
+    //         verifyToken()
+    //     }
+    // }, [])
+
     const history = useHistory();
-    console.log('Histori',props.history)
+    const verifyToken = () => {
+        if (token) {
+            console.log('token',token)
+            props.verifyTokenAction(token, response => {
+                if (response.error === true) {
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('image')
+                    localStorage.removeItem('profile_id')
+                    console.log('error true response', response)
+                    history.push('/')
+                }
+                else if (response.error === false) {
+                    this.props.verified = response.data
+                    console.log('error false response', response)
+                    history.push('/users')
+                }
+            })
+        }
+        else {
+            history.push('/')
+        }
+    }
     // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -59,27 +91,31 @@ const Login = (props) => {
     const [passwordError, setPasswordError] = useState({})
 
     const loginUser = async (event) => {
-        event.preventDefault();
-        const isValid = await validateInput()
-        if (isValid === true) {
-            let formData = { email: email, password: password }
-            props.LoginAction(formData, response => {
-                if (response) {
-                    if (response.error === false) {
-                        history.push('/users')
-                        // window.location.assign('/users')
+        try {
+            event.preventDefault();
+            const isValid = await validateInput()
+            if (isValid === true) {
+                let formData = { email: email, password: password }
+                props.LoginAction(formData, response => {
+                    if (response) {
+                        if (response.error === false) {
+                            history.push('/users')
+                        }
+                        else {
+                            alert(response.message)
+                        }
                     }
                     else {
-                        alert(response.message)
+                        alert('Something went wrong')
                     }
-                }
-                else {
-                    alert('Something went wrong')
-                }
-            })
+                })
+            }
+            else {
+                alert('Unable to validate user')
+            }
         }
-        else {
-            alert('Unable to validate user')
+        catch (error) {
+            alert(error)
         }
     }
 
@@ -186,12 +222,14 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
     const { currentUser } = state.loginReducer;
+    const { verified } = state.tokenReducer;
     return {
-        currentUser
+        currentUser,
+        verified
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ LoginAction }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ LoginAction, verifyTokenAction }, dispatch);
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
