@@ -9,13 +9,13 @@ import './modal.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        position: 'fixed',
         width: '100%',
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
     },
     success: {
-        position: 'fixed',
         right: 15,
         fontSize: '19px',
         fontWeight: 'bold',
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
         color: 'black'
     },
     error: {
-        position: 'fixed',
         right: 15,
         fontSize: '19px',
         fontWeight: 'bold',
