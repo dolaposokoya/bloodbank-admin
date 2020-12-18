@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import { useHistory } from "react-router";
@@ -54,37 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = (props) => {
 
-    // useEffect(() => {
-    //     verifyToken()
-    //     return () => {
-    //         verifyToken()
-    //     }
-    // }, [])
-
     const history = useHistory();
-    const verifyToken = () => {
-        if (token) {
-            console.log('token',token)
-            props.verifyTokenAction(token, response => {
-                if (response.error === true) {
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('image')
-                    localStorage.removeItem('profile_id')
-                    console.log('error true response', response)
-                    history.push('/')
-                }
-                else if (response.error === false) {
-                    this.props.verified = response.data
-                    console.log('error false response', response)
-                    history.push('/users')
-                }
-            })
-        }
-        else {
-            history.push('/')
-        }
-    }
-    // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState({})

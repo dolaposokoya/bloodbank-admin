@@ -13,6 +13,7 @@ import './table.css'
 
 const token = localStorage.getItem('token')
 class BasicTable extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -109,13 +110,7 @@ class BasicTable extends Component {
                             errorMessage: ''
                         })
                     }
-                    else if (response.error === true && response.message === 'Unauthorized Access') {
-                        console.log('error', response.message)
-                        this.setState({ errorMessage: response.message })
-                        return <Redirect to="/" />
-                    }
-
-                    else {
+                    else if (response.error === true) {
                         this.setState({ message: response.message, severity: 'error' })
                     }
                 }
@@ -195,7 +190,7 @@ class BasicTable extends Component {
         const imageUrl = `${apiUrl.baseURL}images/`
         return (
             <div>
-                  <div className="mt-4 mb-4">
+                <div className="mt-4 mb-4">
                     <AlertMessage severity={severity} message={message} />
                 </div>
                 <div className="form-inline mt-5">

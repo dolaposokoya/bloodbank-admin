@@ -184,6 +184,7 @@ table tr:hover {
 
     .table td::after {
         content: '\2191';
+        cursor: pointer;
         position: absolute;
         left: 0;
         width: 50%;
