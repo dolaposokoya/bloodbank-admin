@@ -6,12 +6,12 @@ const basicAuth = btoa(`${REACT_APP_AUTH}`)
 export const apiUrl = {
     baseURL: baseURL,
     basicAuth: basicAuth,
-    loginUrl: apiEndpoint + "user/loginUser",
-    userRegistrationUrl: apiEndpoint + "user/createUser",
+    loginUrl: apiEndpoint + "admin/loginAdmin",
+    userRegistrationUrl: apiEndpoint + "admin/createAdmin",
     getAllUsers: apiEndpoint + "user/getAllUser",
     getMetaData: apiEndpoint + "bloodgroup/bloodAllGroup",
     makeRequest: apiEndpoint + "request/createRequest",
     sortAllUsers: apiEndpoint + "user/sortAllUser",
-    updateStatus: apiEndpoint + "user/updateStatus",
+    updateStatus: apiEndpoint + "admin/updateStatus",
     validateToken: apiEndpoint + "token/validateToken",
 };
