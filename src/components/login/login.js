@@ -51,8 +51,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login(props) {
-    console.log('props', props)
-    // const [state, dispatch] = useReducer(LoginAction)
+    // console.log('props', props)
+    const token = localStorage.getItem('token')
+    if (token) {
+        console.log('Token', token)
+        window.location.assign('/Users')
+    }
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState({})
@@ -60,14 +65,13 @@ function Login(props) {
     const [alertType, setAlertType] = useState('')
     const [iconType, seticonType] = useState('')
     const [message, setmessage] = useState('')
-    console.log('history', props)
+    // console.log('history', props)
 
     const loginUser = async (event) => {
         event.preventDefault();
         const isValid = await validateInput()
         if (isValid === true) {
             let formData = { email: email, password: password }
-            console.log(`${JSON.stringify(formData)}`)
             props.LoginAction(formData, response => {
                 console.log('response', response)
                 if (response) {

@@ -18,7 +18,7 @@ export default function AlertMessage(props) {
     const { alertType, iconType, message } = props
     return (
         <div className={classes.root}>
-            <div className={`message alert alert-${alertType}`} role="alert"><i className={`${iconType}`}></i> {message}</div>
+            <div className={`alert alert-${alertType}`} role="alert"><i className={`${iconType}`}></i> {message}</div>
         </div>
     );
 

@@ -182,8 +182,8 @@ table tr:hover {
         position: relative;
     }
 
-    .table td::after {
-        content: '\2191';
+    .table td:nth-of-type(1)::after{
+        content: '';
         cursor: pointer;
         position: absolute;
         left: 0;
@@ -193,6 +193,20 @@ table tr:hover {
         text-align: left;
     }
 
+    .table td::after {
+        font-family: "Font Awesome 5 free";
+        content: '\f0dc';
+        font-weight: 900;
+        cursor: pointer;
+        position: absolute;
+        margin-top: 5px;
+        left: 0;
+        width: 50%;
+        padding-left: 3px;
+        font-size: 12px;
+        text-align: left;
+    }
+   
     .table td::before {
         content: attr(data-label);
         position: absolute;

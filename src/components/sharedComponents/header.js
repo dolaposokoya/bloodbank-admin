@@ -48,11 +48,11 @@ const useStyles = makeStyles({
         paddingTop: '4px',
         paddingLeft: '20px'
     },
-    purple: {
+    randomColor: {
         float: 'right',
-        margin: '10px',
-        width: '30px',
-        height: '30px',
+        margin: '7px',
+        width: '40px',
+        height: '40px',
         background: `#${imageColor}`,
         borderRadius: '50%',
         cursor: 'pointer',
@@ -73,10 +73,11 @@ export default function Header() {
         bottom: false,
         right: false,
     });
-    const [name, setName] = useState('AO')
+
     const [showModal, setShowModal] = useState(false)
     const imageName = localStorage.getItem('image')
-
+    const name = localStorage.getItem('name')
+    
     const toggleDrawer = (anchor, open) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -123,7 +124,7 @@ export default function Header() {
                 {list('left')}
             </SwipeableDrawer>
 
-            {imageName ? <Avatar className={classes.purple} onClick={showModal === false ? showPopUp : closePopUp} alt="Admin One" src={`${apiUrl.imageUrl}images/${imageName}`} /> : <Avatar variant="square" className={classes.purple} onClick={showModal === false ? showPopUp : closePopUp}>{name}</Avatar>}
+            <Avatar variant="square" className={classes.randomColor} onClick={showModal === false ? showPopUp : closePopUp}>{name}</Avatar>
             {showModal && showModal ? <div className="cardLayout">
                 <div className="content">
                     <Typography style={{ borderBottom: '2px solid black', paddingBottom: '6px' }}>Admin One</Typography>
