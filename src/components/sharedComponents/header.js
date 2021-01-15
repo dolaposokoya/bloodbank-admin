@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -7,7 +7,6 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    Grid,
     Typography
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';

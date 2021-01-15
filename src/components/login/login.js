@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import '../../index.css'
@@ -54,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
 function Login(props) {
     const token = localStorage.getItem('token')
     if (token) {
-        <Link to="/users" />
-        // window.location.assign('/users')
+        // <Link to="/users" />
+        window.location.assign('/users')
     }
 
     const [email, setEmail] = useState('')

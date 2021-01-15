@@ -6,7 +6,6 @@ import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import { apiUrl } from '../../url/apiUrl';
 import $ from 'jquery'
-import { Redirect } from "react-router";
 import AlertMessage from "./alert";
 import Logo from "./image.png";
 import { Success, Danger, Info } from "./iconType";
@@ -25,7 +24,6 @@ class BasicTable extends Component {
             orgtableData: [],
             currentPage: 0,
             errorMessage: '',
-            waiting: 'Data loading.....',
             message: '',
             alertType: '',
             iconType: '',
@@ -212,7 +210,7 @@ class BasicTable extends Component {
             'Status',
             'Avatar'
         ]
-        const { waiting, loading, users, pageCount, errorMessage, alertType, message, iconType } = this.state
+        const {  loading, users, pageCount, errorMessage, alertType, message, iconType } = this.state
         const imageUrl = `${apiUrl.imageUrl}images/`
         return (
             <div>
