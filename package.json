@@ -20,6 +20,7 @@
     "react-paginate": "^6.5.0",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-table": "^7.6.2",
     "react-toastify": "^6.2.0",
