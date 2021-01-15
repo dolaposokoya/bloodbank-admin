@@ -18,6 +18,7 @@ import Copyright from '../sharedComponents/copyright'
 import AlertMessage from "../sharedComponents/alert";
 import { LoginAction } from '../../actions/loginAction';
 import { Success, Danger, Info } from "../sharedComponents/iconType";
+// import { Link } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,11 +52,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login(props) {
-    // console.log('props', props)
     const token = localStorage.getItem('token')
     if (token) {
-        console.log('Token', token)
-        window.location.assign('/users')
+        <Link to="/users" />
+        // window.location.assign('/users')
     }
 
     const [email, setEmail] = useState('')
@@ -65,7 +65,7 @@ function Login(props) {
     const [alertType, setAlertType] = useState('')
     const [iconType, seticonType] = useState('')
     const [message, setmessage] = useState('')
-    // console.log('history', props)
+    console.log('history', props)
 
     const loginUser = async (event) => {
         event.preventDefault();
@@ -79,7 +79,8 @@ function Login(props) {
                         setmessage(response.message)
                         setAlertType('success')
                         setTimeout(() => setmessage(''), 3000);
-                        window.location.assign('/users')
+                        <Link to="/users" />
+                        // window.location.assign('/users')
                     }
                     else {
                         seticonType(Info)
