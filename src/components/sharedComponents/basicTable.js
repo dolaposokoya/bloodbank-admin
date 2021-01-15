@@ -135,7 +135,6 @@ class BasicTable extends Component {
 
     sendRequest = async (id, status) => {
         try {
-            console.log('status', status)
             const headers = {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

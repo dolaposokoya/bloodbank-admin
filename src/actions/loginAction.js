@@ -17,14 +17,12 @@ export const LoginAction = (loginData, callback) => {
             .then(response => response.json())
             .then(userData => {
                 if (userData) {
-                    console.log('userData', userData.data)
                     if (userData.success === false) {
                         dispatch({ type: LOGIN_SUCCESS, payload: userData.message });
                         callback({ error: true, message: userData.message })
                     }
                     else if (userData.success === true) {
                         const name = `${userData.data.first_name.charAt(0).toUpperCase()}${userData.data.last_name.charAt(0).toUpperCase()}`
-                        console.log('name', name)
                         localStorage.setItem('token', userData.data.token)
                         localStorage.setItem('profile_id', userData.data.profile_id)
                         localStorage.setItem('image', userData.data.fileName)

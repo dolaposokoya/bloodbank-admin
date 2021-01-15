@@ -68,7 +68,6 @@ class BasicTable extends Component {
             }
         }
         catch (error) {
-            console.log('error', error.message)
         }
 
     }

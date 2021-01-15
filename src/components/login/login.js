@@ -73,7 +73,6 @@ function Login(props) {
         if (isValid === true) {
             let formData = { email: email, password: password }
             props.LoginAction(formData, response => {
-                console.log('response', response)
                 if (response) {
                     if (response.error === false) {
                         seticonType(Success)
