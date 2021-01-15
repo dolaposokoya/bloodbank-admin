@@ -55,7 +55,7 @@ function Login(props) {
     const token = localStorage.getItem('token')
     if (token) {
         console.log('Token', token)
-        window.location.assign('/Users')
+        window.location.assign('/users')
     }
 
     const [email, setEmail] = useState('')
@@ -79,7 +79,7 @@ function Login(props) {
                         setmessage(response.message)
                         setAlertType('success')
                         setTimeout(() => setmessage(''), 3000);
-                        window.location.assign('/Users')
+                        window.location.assign('/users')
                     }
                     else {
                         seticonType(Info)
