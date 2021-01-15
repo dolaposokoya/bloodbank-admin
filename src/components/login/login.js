@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useReducer } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { useHistory } from "react-router";
 import '../../index.css'
 import {
     Avatar, Button,
@@ -16,12 +15,11 @@ import {
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../sharedComponents/copyright'
+import AlertMessage from "../sharedComponents/alert";
 import { LoginAction } from '../../actions/loginAction';
-import { verifyTokenAction } from '../../actions/verifyTokenAction';
+import { Success, Danger, Info } from "../sharedComponents/iconType";
 
 
-
-const token = localStorage.getItem('token')
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -52,40 +50,54 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Login = (props) => {
-
-    const history = useHistory();
+function Login(props) {
+    console.log('props', props)
+    // const [state, dispatch] = useReducer(LoginAction)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState({})
     const [passwordError, setPasswordError] = useState({})
+    const [alertType, setAlertType] = useState('')
+    const [iconType, seticonType] = useState('')
+    const [message, setmessage] = useState('')
+    console.log('history', props)
 
     const loginUser = async (event) => {
-        try {
-            event.preventDefault();
-            const isValid = await validateInput()
-            if (isValid === true) {
-                let formData = { email: email, password: password }
-                props.LoginAction(formData, response => {
-                    if (response) {
-                        if (response.error === false) {
-                            history.push('/users')
-                        }
-                        else {
-                            alert(response.message)
-                        }
+        event.preventDefault();
+        const isValid = await validateInput()
+        if (isValid === true) {
+            let formData = { email: email, password: password }
+            console.log(`${JSON.stringify(formData)}`)
+            props.LoginAction(formData, response => {
+                console.log('response', response)
+                if (response) {
+                    if (response.error === false) {
+                        seticonType(Success)
+                        setmessage(response.message)
+                        setAlertType('success')
+                        setTimeout(() => setmessage(''), 3000);
+                        window.location.assign('/Users')
                     }
                     else {
-                        alert('Something went wrong')
+                        seticonType(Info)
+                        setmessage(response.message)
+                        setAlertType('info')
+                        setTimeout(() => setmessage(''), 3000);
                     }
-                })
-            }
-            else {
-                alert('Unable to validate user')
-            }
+                }
+                else {
+                    seticonType(Danger)
+                    setmessage('Something went wrong')
+                    setAlertType('danger')
+                    setTimeout(() => setmessage(''), 3000);
+                }
+            })
         }
-        catch (error) {
-            alert(error)
+        else {
+            seticonType(Info)
+            setmessage('Unable to validate user')
+            setAlertType('info')
+            setTimeout(() => setmessage(''), 3000);
         }
     }
 
@@ -115,6 +127,7 @@ const Login = (props) => {
     const classes = useStyles();
     return (
         <Container component="main" maxWidth="xs">
+            {message && <AlertMessage alertType={alertType} message={message} iconType={iconType} />}
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -192,14 +205,12 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
     const { currentUser } = state.loginReducer;
-    const { verified } = state.tokenReducer;
     return {
-        currentUser,
-        verified
+        currentUser
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ LoginAction, verifyTokenAction }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ LoginAction }, dispatch);
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

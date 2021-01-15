@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { usersAction } from '../../actions/allUsersAction';
+import { usersAction } from '../../actions/allUsersAction'
 import { bindActionCreators } from 'redux';
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import { apiUrl } from '../../url/apiUrl';
 import $ from 'jquery'
-import { Redirect } from "react-router";
-import AlertMessage from "./alert";
-import Logo from "./image.png";
 import './table.css'
 
 const token = localStorage.getItem('token')
-class BasicTable extends Component {
 
+class BasicTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -24,10 +21,7 @@ class BasicTable extends Component {
             pageCount: 0,
             orgtableData: [],
             currentPage: 0,
-            errorMessage: '',
-            waiting: 'Data loading.....',
-            message: '',
-            severity: '',
+            waiting: 'Data loading.....'
         }
     }
 
@@ -74,7 +68,7 @@ class BasicTable extends Component {
             }
         }
         catch (error) {
-            this.setState({ message: error.message, severity: 'error' })
+            console.log('error', error.message)
         }
 
     }
@@ -94,9 +88,7 @@ class BasicTable extends Component {
 
     getAllUsers = async () => {
         try {
-            // const history = useHistory()
             this.setState({ loading: true })
-            this.setState({ errorMessage: 'Data loading.....' })
             await this.props.usersAction(token, response => {
                 if (response) {
                     if (response.error === false) {
@@ -106,75 +98,22 @@ class BasicTable extends Component {
                             pageCount: Math.ceil(data.length / this.state.perPage),
                             orgtableData: data,
                             users: slice,
-                            loading: false,
-                            errorMessage: ''
+                            loading: false
                         })
                     }
                     else if (response.error === true) {
-                        this.setState({ message: response.message, severity: 'error' })
+                        alert(response.message)
                     }
                 }
             })
         }
         catch (error) {
-            this.setState({ message: error.message, severity: 'error' })
+            alert(error.message)
         }
     }
 
-    sendRequest = async (id, status) => {
-        try {
-            const headers = {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                token: `Basic ${token}`
-            }
-            const response = await axios({
-                method: 'put',
-                headers,
-                url: `${apiUrl.updateStatus}?id=${id}`,
-                data: { status: status }
-            });
-            if (response && response.data.success === true) {
-                return response.data
-            }
-            else {
-                return response.data
-            }
-        }
-        catch (error) {
-            this.setState({ message: error.message, severity: 'error' })
-        }
-    }
-
-    updateUserStatus = async (id) => {
-        try {
-            let status = parseInt($(`#${id}`).attr('status'))
-            if (status === 1) {
-                const data = await this.sendRequest(id, 0)
-                if (data.success === true) {
-                    $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
-                    $(`#${id}`).attr('status', `${data.data.status}`)
-                    this.setState({ message: data.message, severity: 'success' })
-                }
-                else {
-                    this.setState({ message: data.message, severity: 'error' })
-                }
-            }
-            else {
-                const data = await this.sendRequest(id, 1)
-                if (data.success === true) {
-                    $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
-                    $(`#${id}`).attr('status', `${data.data.status}`)
-                    this.setState({ message: data.message, severity: 'error' })
-                }
-                else {
-                    this.setState({ message: data.message, severity: 'error' })
-                }
-            }
-        }
-        catch (error) {
-            this.setState({ message: error.message, severity: 'error' })
-        }
+    getOneUser = async (id) => {
+        console.log('User id', id)
     }
 
     render() {
@@ -183,16 +122,11 @@ class BasicTable extends Component {
             'Gender',
             'Blood Group',
             'City',
-            'Status',
-            'Avatar'
+            'View Details'
         ]
-        const { waiting, loading, users, pageCount, errorMessage, message, severity } = this.state
-        const imageUrl = `${apiUrl.baseURL}images/`
+        const { waiting, loading, users, pageCount } = this.state
         return (
             <div>
-                <div className="mt-4 mb-4">
-                    <AlertMessage severity={severity} message={message} />
-                </div>
                 <div className="form-inline mt-5">
                     <div className="input-group input-group-md mb-3 search">
                         <input className="form-control mb-2" type="search" id="search-query" placeholder="Search"
@@ -206,45 +140,43 @@ class BasicTable extends Component {
                     <table className="table">
                         <thead>
                             <tr>
-                                <th scope="col">Avatar</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('first_name')}></i> Name</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('gender')}></i> Gender</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('blood_group')}></i> Blood Group</th>
                                 <th scope="col"><i className="fas fa-sort" order="1" onClick={() => this.sortUser('city')}></i> City</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">View Deatils</th>
                             </tr>
                         </thead>
                         <tbody className="user-list">
                             {loading === false ? users.map((item, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td data-label={dataLabel[5]}>{item.profile_image ? <img src={`${imageUrl}${item.profile_image}`} style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="user" /> : <img src={Logo} style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="user" />}</td>
                                         <td data-label={dataLabel[0]}>{item.first_name}</td>
                                         <td data-label={dataLabel[1]}>{item.gender}</td>
                                         <td data-label={dataLabel[2]}>{item.blood_group}</td>
                                         <td data-label={dataLabel[3]}>{item.city}</td>
-                                        <td data-label={dataLabel[4]}>{item.status === 1 ? <i className="fas fa-toggle-on" id={item._id} status={item.status} onClick={() => this.updateUserStatus(item._id)}></i> : <i className="fas fa-toggle-off" status={item.status} id={item._id} onClick={() => this.updateUserStatus(item._id)}></i>}</td>
+                                        <td data-label={dataLabel[4]}><button className="contact-btn btn-outline-primary" onClick={() => this.getOneUser(item._id)}>View Details</button></td>
                                     </tr>
                                 )
-                            }) : <tr className="text-center"><td className="text-center">{errorMessage}</td></tr>}
+                            }) : <tr className="text-center"><td className="text-center">{waiting}</td></tr>}
                         </tbody>
                     </table>
                 </div>
-                <div>
-                    <ReactPaginate
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        breakClassName={'break-me'}
-                        pageCount={pageCount}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={this.handlePageClick}
-                        containerClassName={'pagination'}
-                        subContainerClassName={'pages pagination'}
-                        activeClassName={'active'}
-                    />
-                </div>
+            <div>
+            <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
             </div>
         )
     }
@@ -252,10 +184,8 @@ class BasicTable extends Component {
 
 const mapStateToProps = (state) => {
     const { users } = state.usersReducer
-    const { verified } = state.tokenReducer;
     return {
-        users,
-        verified
+        users
     }
 }
 

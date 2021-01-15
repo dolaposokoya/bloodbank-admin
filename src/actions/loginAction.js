@@ -1,7 +1,5 @@
 import { LOGIN_REQUEST, LOGIN_SUCCESS } from './actionTypes'
 import { apiUrl } from '../url/apiUrl';
-
-
 const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -19,6 +17,7 @@ export const LoginAction = (loginData, callback) => {
             .then(response => response.json())
             .then(userData => {
                 if (userData) {
+                    console.log('userData', userData.data)
                     if (userData.success === false) {
                         dispatch({ type: LOGIN_SUCCESS, payload: userData.message });
                         callback({ error: true, message: userData.message })

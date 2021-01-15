@@ -1,6 +1,57 @@
 .MuiSvgIcon-root.MuiSvgIcon-fontSizeInherit{
   color: black;
 }
+
+.alertMessage {
+  position: fixed;
+  max-width: 350px;
+  right: 0;
+  z-index: 999;
+}
+
+.alert-danger {
+  color: black;
+  font-size: 17px;
+  border-radius: 7px;
+  background-color: #ffa270;
+}
+
+.alert-info {
+  color: black;
+  font-size: 17px;
+  border-radius: 7px;
+  background-color: rgb(161, 228, 255);
+}
+
+.alert-success {
+  color: black;
+  font-size: 20px;
+  border-radius: 7px;
+  background-color: rgb(149, 250, 166);
+}
+
+@keyframes alert {
+  from {
+      right: -600px;
+  }
+
+  to {
+      right: 0;
+  }
+}
+
+.fa-exclamation-triangle {
+  font-size: 25px;
+}
+
+.fa-info-circle {
+  font-size: 25px;
+}
+
+.fa-check-circle {
+  font-size: 25px;
+}
+
 .cardLayout {
   position: relative;
   height: 100px;

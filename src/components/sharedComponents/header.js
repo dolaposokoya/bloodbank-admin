@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -7,6 +7,7 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Grid,
     Typography
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
@@ -14,6 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import PowerSettingsNewRoundedIcon from '@material-ui/icons/PowerSettingsNewRounded';
 import './modal.css'
+import { apiUrl } from "../../url/apiUrl";
 
 
 const max = 999999;
@@ -71,10 +73,9 @@ export default function Header() {
         bottom: false,
         right: false,
     });
-    const [name] = useState('A')
-    // const [name, setName] = useState('A')
-
+    const [name, setName] = useState('AO')
     const [showModal, setShowModal] = useState(false)
+    const imageName = localStorage.getItem('image')
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -121,10 +122,11 @@ export default function Header() {
             >
                 {list('left')}
             </SwipeableDrawer>
-            <Avatar variant="square" className={classes.purple} onClick={showModal === false ? showPopUp : closePopUp}>{name}</Avatar>
+
+            {imageName ? <Avatar className={classes.purple} onClick={showModal === false ? showPopUp : closePopUp} alt="Admin One" src={`${apiUrl.imageUrl}images/${imageName}`} /> : <Avatar variant="square" className={classes.purple} onClick={showModal === false ? showPopUp : closePopUp}>{name}</Avatar>}
             {showModal && showModal ? <div className="cardLayout">
                 <div className="content">
-                    <Typography style={{borderBottom: '2px solid black',paddingBottom: '6px'}}>Admin One</Typography>
+                    <Typography style={{ borderBottom: '2px solid black', paddingBottom: '6px' }}>Admin One</Typography>
                     <div className="flex">
                         <PowerSettingsNewRoundedIcon className="logOut" />
                         <Typography className="logOut">logout</Typography>
