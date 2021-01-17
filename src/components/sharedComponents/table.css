@@ -1,3 +1,8 @@
+svg.MuiCircularProgress-circleDeterminate{
+    width: 100px;
+    color: yellow;
+}
+
 /* Pagination style */
 .pagination {
     padding: 0;

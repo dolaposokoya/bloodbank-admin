@@ -10,6 +10,7 @@ import AlertMessage from "./alert";
 import Logo from "./image.png";
 import { Success, Danger, Info } from "./iconType";
 import './table.css'
+import CircularDeterminate from "./spinner";
 
 
 class BasicTable extends Component {
@@ -182,12 +183,14 @@ class BasicTable extends Component {
 
     updateUserStatus = async (id) => {
         try {
-            let status = parseInt($(`#${id}`).attr('status'))
+            let status = parseInt($(`#${id}`).attr('status'));
+            console.log('Styatus', status)
             if (status === 1) {
                 const data = await this.sendRequest(id, 0)
                 if (data && data.success === true) {
-                    $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
-                    $(`#${id}`).attr('status', `${data.data.status}`)
+                    // $(`#${id}`).removeClass('fa-toggle-on').addClass('fa-toggle-off')
+                    // $(`#${id}`).attr('status', `${data.data.status}`)
+                    await this.getAllUsers()
                     this.setState({ message: data.message, alertType: 'success', iconType: Success })
                     setTimeout(() => this.setState({ message: '' }), 3000)
                 }
@@ -199,8 +202,9 @@ class BasicTable extends Component {
             else {
                 const data = await this.sendRequest(id, 1)
                 if (data && data.success === true) {
-                    $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
-                    $(`#${id}`).attr('status', `${data.data.status}`)
+                    // $(`#${id}`).removeClass('fa-toggle-off').addClass('fa-toggle-on')
+                    // $(`#${id}`).attr('status', `${data.data.status}`)
+                    await this.getAllUsers()
                     this.setState({ message: data.message, alertType: 'success', iconType: Success })
                     setTimeout(() => this.setState({ message: '' }), 3000)
                 }
@@ -240,6 +244,7 @@ class BasicTable extends Component {
             <div>
                 <div className="mt-4 mb-4">
                     {message && <AlertMessage alertType={alertType} message={message} iconType={iconType} />}
+                    {/* <CircularDeterminate /> */}
                     {/* <CssBaseline /> */}
                 </div>
                 <div className="form-inline mt-5">
