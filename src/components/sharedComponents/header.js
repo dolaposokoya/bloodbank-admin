@@ -13,7 +13,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import PowerSettingsNewRoundedIcon from '@material-ui/icons/PowerSettingsNewRounded';
-import './modal.css'
+import './modal.css';
+import { useHistory } from "react-router-dom";
 import { apiUrl } from "../../url/apiUrl";
 
 
@@ -65,6 +66,7 @@ const useStyles = makeStyles({
 
 export default function Header() {
     const classes = useStyles();
+    const history = useHistory()
     const menus = ['Inbox', 'Starred', 'Send email', 'Drafts']
     const [state, setState] = useState({
         top: false,
@@ -76,7 +78,7 @@ export default function Header() {
     const [showModal, setShowModal] = useState(false)
     const imageName = localStorage.getItem('image')
     const name = localStorage.getItem('name')
-    
+
     const toggleDrawer = (anchor, open) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -111,6 +113,14 @@ export default function Header() {
         </div>
     );
 
+    const logOut = () => {
+        localStorage.removeItem('admin_token')
+        localStorage.removeItem('name')
+        localStorage.removeItem('image')
+        localStorage.removeItem('profile_id')
+        history.push('/')
+    }
+
     return (
         <div className={classes.header}>
             <MenuIcon onClick={toggleDrawer('left', true)} className={classes.menuIcon} />
@@ -127,7 +137,7 @@ export default function Header() {
             {showModal && showModal ? <div className="cardLayout">
                 <div className="content">
                     <Typography style={{ borderBottom: '2px solid black', paddingBottom: '6px' }}>Admin One</Typography>
-                    <div className="flex">
+                    <div className="flex" onClick={() => logOut}>
                         <PowerSettingsNewRoundedIcon className="logOut" />
                         <Typography className="logOut">logout</Typography>
                     </div>

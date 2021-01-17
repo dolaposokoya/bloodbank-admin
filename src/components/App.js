@@ -6,12 +6,14 @@ import User from '../components/users/users'
 
 
 function App() {
+
   return (
     <>
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={Login} />
           <Route path="/users" exact component={User} />
+          {/* <Route path="/users" component={User} /> */}
         </Switch>
       </Router>
     </>

@@ -18,7 +18,7 @@ import Copyright from '../sharedComponents/copyright'
 import AlertMessage from "../sharedComponents/alert";
 import { LoginAction } from '../../actions/loginAction';
 import { Success, Danger, Info } from "../sharedComponents/iconType";
-// import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,11 +52,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login(props) {
-    const token = localStorage.getItem('token')
+
+    const history = useHistory();
+    const token = localStorage.getItem('admin_token')
     if (token) {
-        // <Link to="/users" />
-        window.location.assign('/users')
+        history.push('/users')
     }
+
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -65,7 +67,6 @@ function Login(props) {
     const [alertType, setAlertType] = useState('')
     const [iconType, seticonType] = useState('')
     const [message, setmessage] = useState('')
-    console.log('history', props)
 
     const loginUser = async (event) => {
         event.preventDefault();
@@ -75,12 +76,12 @@ function Login(props) {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
+                        // localStorage.setItem('admin_token', response.admin_token)
                         seticonType(Success)
                         setmessage(response.message)
                         setAlertType('success')
                         setTimeout(() => setmessage(''), 3000);
-                        <Link to="/users" />
-                        // window.location.assign('/users')
+                        history.push('/users')
                     }
                     else {
                         seticonType(Info)
@@ -140,7 +141,8 @@ function Login(props) {
                 <Typography component="h1" variant="h5">
                     Sign in
           </Typography>
-                <form className={classes.form} validate>
+                <form className={classes.form}>
+                    {/* <form className={classes.form} validate> */}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -208,9 +210,10 @@ function Login(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { currentUser } = state.loginReducer;
+    const { currentUser, admin_token } = state.loginReducer;
     return {
-        currentUser
+        currentUser,
+        admin_token
     }
 }
 

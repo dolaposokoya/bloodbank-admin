@@ -11,7 +11,7 @@ import Logo from "./image.png";
 import { Success, Danger, Info } from "./iconType";
 import './table.css'
 
-const token = localStorage.getItem('token')
+
 class BasicTable extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +28,7 @@ class BasicTable extends Component {
             alertType: '',
             iconType: '',
         }
-        this.mobileUpdateStatus = this.mobileUpdateStatus.bind(this);
+        // this.mobileUpdateStatus = this.mobileUpdateStatus.bind(this);
         // this.mobileUpdateStatus = this.mobileUpdateStatus.bind(this);
     }
 
@@ -36,6 +36,9 @@ class BasicTable extends Component {
         await this.getAllUsers();
     }
 
+    componentWillUnmount() {
+        // await this.getAllUsers();
+    }
 
     loadMoreData() {
         const data = this.state.orgtableData;
@@ -49,6 +52,7 @@ class BasicTable extends Component {
 
     sortUser = async (fieldName) => {
         try {
+            const token = localStorage.getItem('token')
             this.setState({ loading: true })
             let orderBy = $(this).attr('order')
             const headers = {
@@ -96,43 +100,62 @@ class BasicTable extends Component {
 
     getAllUsers = async () => {
         try {
-            // const history = useHistory()
+            const token = localStorage.getItem('admin_token')
+            const history = this.props.history
             this.setState({ loading: true })
             this.setState({ errorMessage: 'Data loading.....' })
-            await this.props.usersAction(token, response => {
-                if (response) {
-                    if (response.error === false) {
-                        const data = response.data
-                        const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
-                        this.setState({
-                            pageCount: Math.ceil(data.length / this.state.perPage),
-                            orgtableData: data,
-                            users: slice,
-                            loading: false,
-                            errorMessage: ''
-                        })
-                    }
-                    else if (response.error === true && response.message === 'Unauthorized Access') {
-                        this.setState({ message: response.message, alertType: 'danger', iconType: Danger })
-                        this.setState({ errorMessage: response.message })
-                        setTimeout(() => this.setState({ message: '' }), 3000)
-                        window.location.assign('/')
-                    }
-                    else if (response.error === true && !response.message === 'Unauthorized Access') {
-                        this.setState({ message: response.message, alertType: 'info', iconType: Info })
-                        setTimeout(() => this.setState({ message: '' }), 3000)
-                    }
+            const headers = {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                authorization: `Basic ${apiUrl.basicAuth}`,
+                token: `Bearer ${token}`
+            }
+            const response = await axios.get(`${apiUrl.getAllUsers}`, {
+                headers: headers
+            });
+            if (response) {
+                const res = response.data
+                if (res.success === false && res.status === 401) {
+                    console.log('Result 401 statis', res)
+                    this.setState({ message: res.message, alertType: 'danger', iconType: Danger, loading: false })
+                    this.setState({ errorMessage: res.message, loading: false })
+                    setTimeout(() => this.setState({ message: '' }), 3000)
+                    localStorage.removeItem('admin_token')
+                    localStorage.removeItem('name')
+                    localStorage.removeItem('image')
+                    localStorage.removeItem('profile_id')
+                    history.push('/')
                 }
-            })
+                else if (res.success === false && res.status < 399) {
+                    console.log('Result status', res)
+                    this.setState({ message: res.message, alertType: 'info', iconType: Info, loading: false, errorMessage: res.message })
+                    setTimeout(() => this.setState({ message: '' }), 3000)
+                }
+                else if (res.success === true) {
+                    const slice = res.data.slice(this.state.offset, this.state.offset + this.state.perPage)
+                    this.setState({
+                        pageCount: Math.ceil(res.data.length / this.state.perPage),
+                        orgtableData: res.data,
+                        users: slice,
+                        loading: false,
+                        errorMessage: ''
+                    })
+                }
+            }
+            else {
+                this.setState({ message: 'Something went wrong', alertType: 'info', iconType: Info, loading: false, errorMessage: 'Something went wrong' })
+                setTimeout(() => this.setState({ message: '' }), 3000)
+            }
         }
         catch (error) {
-            this.setState({ message: error.message, alertType: 'danger', iconType: Danger })
+            this.setState({ message: error.message, alertType: 'danger', iconType: Danger, loading: false })
             setTimeout(() => this.setState({ message: '' }), 3000)
         }
     }
 
     sendRequest = async (id, status) => {
         try {
+            const token = localStorage.getItem('token')
             const headers = {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -210,7 +233,7 @@ class BasicTable extends Component {
             'Status',
             'Avatar'
         ]
-        const {  loading, users, pageCount, errorMessage, alertType, message, iconType } = this.state
+        const { loading, users, pageCount, errorMessage, alertType, message, iconType } = this.state
         const imageUrl = `${apiUrl.imageUrl}images/`
         return (
             <div>
@@ -276,11 +299,11 @@ class BasicTable extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { users } = state.usersReducer
-    // const { verified } = state.tokenReducer;
+    const { users } = state.usersReducer;
+    const { admin_token } = state.loginReducer;
     return {
         users,
-        // verified
+        admin_token,
     }
 }
 
