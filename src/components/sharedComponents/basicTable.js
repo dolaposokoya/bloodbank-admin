@@ -52,7 +52,7 @@ class BasicTable extends Component {
 
     sortUser = async (fieldName) => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('admin_token')
             this.setState({ loading: true })
             let orderBy = $(this).attr('order')
             const headers = {
@@ -155,7 +155,7 @@ class BasicTable extends Component {
 
     sendRequest = async (id, status) => {
         try {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('admin_token')
             const headers = {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -224,6 +224,7 @@ class BasicTable extends Component {
             });
         });
     }
+
     render() {
         const dataLabel = [
             'Name',
