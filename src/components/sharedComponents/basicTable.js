@@ -137,8 +137,8 @@ class BasicTable extends Component {
                     }
                     if (res.success === false && (res.message === 'Access Denied' || res.message === 'Unauthorized Access')) {
                         this.setState({ message: res.message, alertType: 'danger', iconType: Danger, loading: false })
-                        setTimeout(() => this.setState({ message: '' }), 3500)
-                        history.push('/')
+                        // setTimeout(() => this.setState({ message: '' }), 3500)
+                        // history.push('/')
                     }
                 }
             }
