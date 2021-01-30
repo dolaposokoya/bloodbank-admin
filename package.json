@@ -56,6 +56,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy1": "http://localhost:5000",
-  "proxy": "https://api-bloodbank-v1.herokuapp.com"
+  "proxy": "http://localhost:5000"
 }
