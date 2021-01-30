@@ -1,0 +1,19 @@
+:root {
+    --font: 'Roboto Mono', monospace;
+}
+
+* {
+    font-family: var(--font);
+}
+
+.loader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader h1 {
+    font-size: 1.5rem;
+    margin-top: -200px;
+}

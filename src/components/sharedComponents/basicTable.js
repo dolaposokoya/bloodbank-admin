@@ -10,10 +10,12 @@ import AlertMessage from "./alert";
 import Logo from "./image.png";
 import { Success, Danger, Info } from "./iconType";
 import './table.css'
-import CircularDeterminate from "./spinner";
+import { UserContext } from "../Context/UserContext";
 
 
 class BasicTable extends Component {
+
+    static contextType = UserContext
     constructor(props) {
         super(props)
         this.state = {
@@ -27,13 +29,15 @@ class BasicTable extends Component {
             errorMessage: '',
             message: '',
             alertType: '',
-            iconType: '',
+            iconType: ''
         }
         // this.mobileUpdateStatus = this.mobileUpdateStatus.bind(this);
         // this.mobileUpdateStatus = this.mobileUpdateStatus.bind(this);
     }
 
     componentDidMount = async () => {
+        const [session, setsession] = this.context
+        console.log('class componentDidMount', session)
         await this.getAllUsers();
     }
 
@@ -101,7 +105,8 @@ class BasicTable extends Component {
 
     getAllUsers = async () => {
         try {
-            const token = localStorage.getItem('admin_token')
+            const [session, setsession] = this.context
+            console.log('class session', session)
             const history = this.props.history
             this.setState({ loading: true })
             this.setState({ errorMessage: 'Data loading.....' })
@@ -109,30 +114,13 @@ class BasicTable extends Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 authorization: `Basic ${apiUrl.basicAuth}`,
-                token: `Bearer ${token}`
             }
             const response = await axios.get(`${apiUrl.getAllUsers}`, {
                 headers: headers
             });
             if (response) {
                 const res = response.data
-                if (res.success === false && res.status === 401) {
-                    console.log('Result 401 statis', res)
-                    this.setState({ message: res.message, alertType: 'danger', iconType: Danger, loading: false })
-                    this.setState({ errorMessage: res.message, loading: false })
-                    setTimeout(() => this.setState({ message: '' }), 3000)
-                    localStorage.removeItem('admin_token')
-                    localStorage.removeItem('name')
-                    localStorage.removeItem('image')
-                    localStorage.removeItem('profile_id')
-                    history.push('/')
-                }
-                else if (res.success === false && res.status < 399) {
-                    console.log('Result status', res)
-                    this.setState({ message: res.message, alertType: 'info', iconType: Info, loading: false, errorMessage: res.message })
-                    setTimeout(() => this.setState({ message: '' }), 3000)
-                }
-                else if (res.success === true) {
+                if (res.success === true) {
                     const slice = res.data.slice(this.state.offset, this.state.offset + this.state.perPage)
                     this.setState({
                         pageCount: Math.ceil(res.data.length / this.state.perPage),
@@ -141,6 +129,17 @@ class BasicTable extends Component {
                         loading: false,
                         errorMessage: ''
                     })
+                }
+                else {
+                    if (res.success === false && res.status < 400) {
+                        this.setState({ message: res.message, alertType: 'info', iconType: Info, loading: false, errorMessage: res.message })
+                        setTimeout(() => this.setState({ message: '' }), 3000)
+                    }
+                    if (res.success === false && (res.message === 'Access Denied' || res.message === 'Unauthorized Access')) {
+                        this.setState({ message: res.message, alertType: 'danger', iconType: Danger, loading: false })
+                        setTimeout(() => this.setState({ message: '' }), 3500)
+                        history.push('/')
+                    }
                 }
             }
             else {
@@ -156,11 +155,9 @@ class BasicTable extends Component {
 
     sendRequest = async (id, status) => {
         try {
-            const token = localStorage.getItem('admin_token')
             const headers = {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                token: `Basic ${token}`
+                'Content-Type': 'application/json'
             }
             const response = await axios({
                 method: 'put',

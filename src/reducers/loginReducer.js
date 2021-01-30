@@ -2,7 +2,7 @@ import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR } from '../actions/actionType
 
 const INITIAL_STATE = {
     currentUser: {},
-    admin_token: '',
+    session_id: '',
 };
 function loginReducer(state = INITIAL_STATE, action) {
     switch (action.types) {
@@ -17,7 +17,7 @@ function loginReducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 currentUser: action.payload,
-                admin_token: action.admin_token
+                session_id: action.session_id
             }
         default: return state
     }

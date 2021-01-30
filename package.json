@@ -13,7 +13,9 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "dotenv": "^8.2.0",
+    "http-proxy-middleware": "^1.0.6",
     "jquery": "^3.5.1",
+    "js-cookie": "^2.2.1",
     "material-table": "^1.69.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -53,5 +55,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy1": "http://localhost:5000",
+  "proxy": "https://api-bloodbank-v1.herokuapp.com"
 }

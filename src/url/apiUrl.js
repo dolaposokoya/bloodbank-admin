@@ -1,6 +1,7 @@
-const { REACT_APP_ENVIRONMENT, REACT_APP_AUTH } = process.env
-const apiEndpoint = REACT_APP_ENVIRONMENT === 'development' ? `http://localhost:5000/api/` : `https://api-bloodbank-v1.herokuapp.com/api/`
-const baseEndpoint = REACT_APP_ENVIRONMENT === 'development' ? `http://localhost:5000/` : `https://api-bloodbank-v1.herokuapp.com/`
+const { REACT_APP_ENVIRONMENT, REACT_APP_AUTH, REACT_APP_API_URL, REACT_APP_BASE_URL } = process.env
+const apiEndpoint = REACT_APP_ENVIRONMENT === 'development' ? `${REACT_APP_API_URL}` : `${REACT_APP_API_URL}`
+const baseEndpoint = REACT_APP_ENVIRONMENT === 'development' ? `${REACT_APP_BASE_URL}` : `${REACT_APP_BASE_URL}`
+// https://api-bloodbank-v1.herokuapp.com/
 const basicAuth = btoa(`${REACT_APP_AUTH}`)
 
 export const apiUrl = {

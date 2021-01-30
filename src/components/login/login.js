@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { UserContext } from "../Context/UserContext";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import '../../index.css'
@@ -19,6 +20,7 @@ import AlertMessage from "../sharedComponents/alert";
 import { LoginAction } from '../../actions/loginAction';
 import { Success, Danger, Info } from "../sharedComponents/iconType";
 import { useHistory } from "react-router-dom";
+import Loader from "../sharedComponents/Loader";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,12 +55,18 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
 
+    const [session, setsession] = useContext(UserContext)
+    useEffect(() => {
+        if (session) {
+            history.push('/users')
+        }
+        console.log('function token', session)
+    }, [])
     const history = useHistory();
-    const token = localStorage.getItem('admin_token')
-    if (token) {
-        history.push('/users')
-    }
-
+    // if (session) {
+    //     history.push('/users')
+    // }
+    // console.log('function token', session)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -67,8 +75,10 @@ function Login(props) {
     const [alertType, setAlertType] = useState('')
     const [iconType, seticonType] = useState('')
     const [message, setmessage] = useState('')
+    const [loading, setloading] = useState(false)
 
     const loginUser = async (event) => {
+        setloading(true)
         event.preventDefault();
         const isValid = await validateInput()
         if (isValid === true) {
@@ -76,11 +86,12 @@ function Login(props) {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        // localStorage.setItem('admin_token', response.admin_token)
+                        setsession(response.session)
                         seticonType(Success)
                         setmessage(response.message)
                         setAlertType('success')
                         setTimeout(() => setmessage(''), 3000);
+                        setTimeout(() => setloading(false), 3300);
                         history.push('/users')
                     }
                     else {
@@ -88,6 +99,7 @@ function Login(props) {
                         setmessage(response.message)
                         setAlertType('info')
                         setTimeout(() => setmessage(''), 3000);
+                        setTimeout(() => setloading(false), 3300);
                     }
                 }
                 else {
@@ -95,6 +107,7 @@ function Login(props) {
                     setmessage('Something went wrong')
                     setAlertType('danger')
                     setTimeout(() => setmessage(''), 3000);
+                    setTimeout(() => setloading(false), 3300);
                 }
             })
         }
@@ -103,6 +116,7 @@ function Login(props) {
             setmessage('Unable to validate user')
             setAlertType('info')
             setTimeout(() => setmessage(''), 3000);
+            setTimeout(() => setloading(false), 3300);
         }
     }
 
@@ -134,77 +148,81 @@ function Login(props) {
         <Container component="main" maxWidth="xs">
             {message && <AlertMessage alertType={alertType} message={message} iconType={iconType} />}
             <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-          </Typography>
-                <form className={classes.form}>
-                    {/* <form className={classes.form} validate> */}
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        value={email}
-                        onChange={(e) => { setEmail(e.target.value) }}
-                    />
-                    {Object.keys(emailError).map((key) => {
-                        return key && key ? <Typography component="h6" variant="h6" className={classes.error}>
-                            {emailError[key]}
-                        </Typography> : null
-                    })}
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={(e) => { setPassword(e.target.value) }}
-                    />
-                    {Object.keys(passwordError).map((key) => {
-                        return key && key ? <Typography component="h6" variant="h6" className={classes.error}>
-                            {passwordError[key]}
-                        </Typography> : null
+            <div>
+                {!loading ? <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form className={classes.form}>
+                        {/* <form className={classes.form} validate> */}
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            value={email}
+                            onChange={(e) => { setEmail(e.target.value) }}
+                        />
+                        {Object.keys(emailError).map((key) => {
+                            return key && key ? <Typography component="h6" variant="h6" className={classes.error}>
+                                {emailError[key]}
+                            </Typography> : null
+                        })}
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={password}
+                            onChange={(e) => { setPassword(e.target.value) }}
+                        />
+                        {Object.keys(passwordError).map((key) => {
+                            return key && key ? <Typography component="h6" variant="h6" className={classes.error}>
+                                {passwordError[key]}
+                            </Typography> : null
 
-                    })}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        className={classes.submit}
-                        onClick={loginUser}>
-                        Sign In
-                     </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                     </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                        })}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            className={classes.submit}
+                            onClick={loginUser}>
+                            Sign In
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password?
                             </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
+                    </form>
+                </div> : <Loader />}
+                <div>
+                    <Box mt={8}>
+                        <Copyright />
+                    </Box>
+                </div>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
         </Container>
     )
 }

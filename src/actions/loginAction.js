@@ -6,6 +6,7 @@ const headers = {
     authorization: `Basic ${apiUrl.basicAuth}`
 }
 
+
 export const LoginAction = (loginData, callback) => {
     return dispatch => {
         dispatch({ type: LOGIN_REQUEST });
@@ -23,13 +24,10 @@ export const LoginAction = (loginData, callback) => {
                     }
                     else if (userData.success === true) {
                         const name = `${userData.data.first_name.charAt(0).toUpperCase()}${userData.data.last_name.charAt(0).toUpperCase()}`
-                        localStorage.setItem('profile_id', userData.data.profile_id)
-                        localStorage.setItem('admin_token', userData.data.token)
-                        // const token = localStorage.getItem('admin_token')
-                        localStorage.setItem('image', userData.data.fileName)
+                        localStorage.setItem('image', userData.data.profile_image)
                         localStorage.setItem('name', name)
-                        dispatch({ type: LOGIN_SUCCESS, payload: userData.message, admin_token: userData.data.token });
-                        callback({ error: false, message: userData.message, admin_token: userData.data.token })
+                        dispatch({ type: LOGIN_SUCCESS, payload: userData.message, session: userData.data.session });
+                        callback({ error: false, message: userData.message, session: userData.data.session, sessionID: userData.data.sessionID })
                     }
                 }
             }).catch(error => {
