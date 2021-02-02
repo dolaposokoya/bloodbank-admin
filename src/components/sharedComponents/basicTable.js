@@ -36,13 +36,7 @@ class BasicTable extends Component {
     }
 
     componentDidMount = async () => {
-        const [session, setsession] = this.context
-        console.log('class componentDidMount', session)
         await this.getAllUsers();
-    }
-
-    componentWillUnmount() {
-        // await this.getAllUsers();
     }
 
     loadMoreData() {
@@ -105,8 +99,6 @@ class BasicTable extends Component {
 
     getAllUsers = async () => {
         try {
-            const [session, setsession] = this.context
-            console.log('class session', session)
             const history = this.props.history
             this.setState({ loading: true })
             this.setState({ errorMessage: 'Data loading.....' })
@@ -138,7 +130,7 @@ class BasicTable extends Component {
                     if (res.success === false && (res.message === 'Access Denied' || res.message === 'Unauthorized Access')) {
                         this.setState({ message: res.message, alertType: 'danger', iconType: Danger, loading: false })
                         setTimeout(() => this.setState({ message: '' }), 4000)
-                        window.location = '/'
+                        history.push('/')
                     }
                 }
             }

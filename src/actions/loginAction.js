@@ -1,5 +1,6 @@
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR } from './actionTypes'
 import { apiUrl } from '../url/apiUrl';
+
 const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -24,10 +25,12 @@ export const LoginAction = (loginData, callback) => {
                     }
                     else if (userData.success === true) {
                         const name = `${userData.data.first_name.charAt(0).toUpperCase()}${userData.data.last_name.charAt(0).toUpperCase()}`
-                        localStorage.setItem('image', userData.data.profile_image)
+                        const profile_image = `${userData.data.profile_image}`
+                        const session_id = `${userData.data.SESSION_ID}`
+                        localStorage.setItem('image', profile_image)
                         localStorage.setItem('name', name)
-                        dispatch({ type: LOGIN_SUCCESS, payload: userData.message, session: userData.data.session });
-                        callback({ error: false, message: userData.message, session: userData.data.session, sessionID: userData.data.sessionID })
+                        dispatch({ type: LOGIN_SUCCESS, payload: userData.message });
+                        callback({ error: false, message: userData.message, session_id: session_id })
                     }
                 }
             }).catch(error => {

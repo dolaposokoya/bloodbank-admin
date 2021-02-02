@@ -46,6 +46,16 @@ const useStyles = makeStyles((theme) => ({
         color: 'black',
         fontSize: '17px'
     },
+    auth: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    authImage: {
+        width: '15px',
+        height: '15px',
+        margin: '0 5px',
+        outline: 'none'
+    },
     error: {
         fontSize: '15px',
         color: 'red',
@@ -55,18 +65,17 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
 
-    const [session, setsession] = useContext(UserContext)
+    const session_id = document.cookie
+    const [SESSION_ID, SETSESSION_ID] = useContext(UserContext)
+    const history = useHistory();
+
     useEffect(() => {
-        if (session) {
+        if (session_id || SESSION_ID) {
+            SETSESSION_ID(session_id)
             history.push('/users')
         }
-        console.log('function token', session)
     }, [])
-    const history = useHistory();
-    // if (session) {
-    //     history.push('/users')
-    // }
-    // console.log('function token', session)
+
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -86,7 +95,8 @@ function Login(props) {
             props.LoginAction(formData, response => {
                 if (response) {
                     if (response.error === false) {
-                        setsession(response.session)
+                        const session = document.cookie
+                        SETSESSION_ID(session)
                         seticonType(Success)
                         setmessage(response.message)
                         setAlertType('success')
@@ -149,7 +159,7 @@ function Login(props) {
             {message && <AlertMessage alertType={alertType} message={message} iconType={iconType} />}
             <CssBaseline />
             <div>
-                {!loading ? <div className={classes.paper}>
+                <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
@@ -203,20 +213,20 @@ function Login(props) {
                             onClick={loginUser}>
                             Sign In
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                            </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </form>
-                </div> : <Loader />}
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </div>
                 <div>
                     <Box mt={8}>
                         <Copyright />
