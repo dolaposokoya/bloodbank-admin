@@ -70,12 +70,16 @@ function Login(props) {
     const history = useHistory();
 
     useEffect(() => {
+        checkUser()
+    }, [])
+
+    const checkUser = async () => {
+        console.log('session_id', session_id, SESSION_ID)
         if (session_id || SESSION_ID) {
             SETSESSION_ID(session_id)
             history.push('/users')
         }
-    }, [])
-
+    }
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

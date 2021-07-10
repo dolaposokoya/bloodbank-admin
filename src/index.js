@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from "react-router-dom";
 import store from './store'
 import Auth0ProviderWithHistory from "./Auth/auth0-provider-with-history";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 
 ReactDOM.render(
@@ -19,3 +20,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+serviceWorkerRegistration.register();
