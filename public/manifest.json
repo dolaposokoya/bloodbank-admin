@@ -9,7 +9,7 @@
     "icons": [
         {
             "src": "maskable.png",
-            "sizes": "192x192 1960x1960",
+            "sizes": "192x192 512x512 1960x1960",
             "type": "image/png",
             "purpose": "any maskable"
         },
